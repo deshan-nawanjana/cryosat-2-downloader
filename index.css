@@ -1,0 +1,22 @@
+* {
+    font-family: Consolas;
+    color: #FFF8;
+    line-height: 25px;
+    font-size: 14px;
+}
+
+body {
+    margin: 15px;
+    background-color: #000;
+}
+
+button {
+    border: 2px solid #FFF8;
+    background-color: #000;
+    cursor: pointer;
+    padding: 0px 10px;
+}
+
+button:hover {
+    background-color: #FFF2;
+}

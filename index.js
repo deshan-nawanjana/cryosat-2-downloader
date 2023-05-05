@@ -27,6 +27,9 @@ const getFile = async path => {
 // output object
 let object = [{ path: '', is_dir: true }]
 
+// extensions array
+let extens = []
+
 // method to log
 const log = message => {
     // create element
@@ -61,10 +64,18 @@ const download = async item => {
             await download(data[i])
         }
     } else if (!item.done) {
-        // log item
-        log('Downloading File: ' + item.path)
-        // download file
-        await getFile(dwnpoint + item.path)
+        // get extension
+        const ext = '.' + item.path.split('.').pop().toLowerCase()
+        // if file extension includes
+        if (extens.includes(ext)) {
+            // log item
+            log('Downloading File: ' + item.path)
+            // download file
+            await getFile(dwnpoint + item.path)
+        } else {
+            // log item
+            log('Skip File: ' + item.path)
+        }
     }
 }
 
@@ -73,9 +84,15 @@ document.querySelector('button').addEventListener('click', async event => {
     // remove button
     event.target.remove()
     // get start point
-    const start = document.querySelector('input')
+    const start = document.querySelector('#input_1')
     // get start value
     const value = decodeURIComponent(start.value.split('#')[1] || '')
+    // get extensions
+    const types = document.querySelector('#input_2')
+    // set extensions
+    extens = types.value.replace(/ /g, '').split('|')
+    // remove extensions element
+    types.outerHTML = types.value
     // set start value
     object[0].path = value
     // remove start element

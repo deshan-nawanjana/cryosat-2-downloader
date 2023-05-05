@@ -25,14 +25,7 @@ const getFile = async path => {
 }
 
 // output object
-let object = 'cryosat-2' in localStorage
-    ? JSON.parse(localStorage['cryosat-2'])
-    : [{ path: '', is_dir: true }]
-
-// method to save object
-const saveObject = () => {
-    localStorage['cryosat-2'] = JSON.stringify(object)
-}
+let object = [{ path: '', is_dir: true }]
 
 // method to log
 const log = message => {
@@ -62,8 +55,6 @@ const download = async item => {
             : await getListing(endpoint + item.path)
         // set data on child
         item.child = data
-        // save object
-        saveObject()
         // for each data item
         for (let i = 0; i < data.length; i++) {
             // download each item
@@ -74,10 +65,6 @@ const download = async item => {
         log('Downloading File: ' + item.path)
         // download file
         await getFile(dwnpoint + item.path)
-        // set done flag
-        item.done = true
-        // save object
-        saveObject()
     }
 }
 
@@ -85,6 +72,14 @@ const download = async item => {
 document.querySelector('button').addEventListener('click', async event => {
     // remove button
     event.target.remove()
+    // get start point
+    const start = document.querySelector('input')
+    // get start value
+    const value = decodeURIComponent(start.value.split('#')[1] || '')
+    // set start value
+    object[0].path = value
+    // remove start element
+    start.outerHTML = value
     // start download
     await download(object[0])
     // log item
